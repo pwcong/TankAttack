@@ -3,12 +3,16 @@ package me.pwcong.tankattack.main.entity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
+
 
 /**
  * Created by Pwcong on 2016/11/30.
  */
 
 public class Bullet extends BaseEntity implements BaseEntity.Behavior {
+
+    private final String TAG =getClass().getSimpleName();
 
 
     private Bitmap bullet;
@@ -30,6 +34,9 @@ public class Bullet extends BaseEntity implements BaseEntity.Behavior {
 
     @Override
     protected void initVariable() {
+
+        setSelfWidth(bullet.getWidth());
+        setSelfHeight(bullet.getHeight());
 
         switch (status){
 
@@ -73,6 +80,24 @@ public class Bullet extends BaseEntity implements BaseEntity.Behavior {
 
         setPosX(getPosX()+speed*direction.getX());
         setPosY(getPosY()+speed*direction.getY());
+
+    }
+
+    public void checkCollision(BaseEntity other){
+
+
+
+        if(getFlag() != other.getFlag()){
+
+            if(getPosX()>other.getPosX() && getPosX()<other.getPosX()+other.getSelfWidth() &&
+                    getPosY()>other.getPosY()&& getPosY()<other.getPosY()+other.getSelfHeight()){
+
+                Log.i(TAG, "checkCollision: OK");
+
+                setDead(true);
+
+            }
+        }
 
     }
 

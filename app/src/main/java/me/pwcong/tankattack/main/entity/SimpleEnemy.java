@@ -141,6 +141,16 @@ public class SimpleEnemy extends BaseEntity implements BaseEntity.Behavior{
 
     public void checkCollision(BaseEntity other){
 
+        if(other.getFlag() == BaseEntity.FLAG_PLAYER){
+
+            if(Math.abs(getPosX()-other.getPosX())<(getSelfWidth()+other.getSelfWidth())/2 &&
+                    Math.abs(getPosY()-other.getPosY())<(getSelfHeight()+other.getSelfHeight())/2){
+
+                setDead(true);
+
+            }
+        }
+
     }
 
     public String getStatus() {

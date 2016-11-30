@@ -64,7 +64,6 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener {
             @Override
             public void call(Void aVoid) {
                 scene.fire();
-                Log.i(TAG, "onClick: FIRE");
             }
         });
 
@@ -91,29 +90,24 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener {
                     case R.id.btn_up:
                         scene.changePlayerStatus(BaseEntity.STATUS_UP);
                         scene.changePlayerMoving(true);
-                        Log.i(TAG, "onTouch: UP");
                         break;
                     case R.id.btn_down:
                         scene.changePlayerStatus(BaseEntity.STATUS_DOWN);
                         scene.changePlayerMoving(true);
-                        Log.i(TAG, "onTouch: DOWN");
                         break;
                     case R.id.btn_left:
                         scene.changePlayerStatus(BaseEntity.STATUS_LEFT);
                         scene.changePlayerMoving(true);
-                        Log.i(TAG, "onTouch: LEFT");
                         break;
                     case R.id.btn_right:
                         scene.changePlayerStatus(BaseEntity.STATUS_RIGHT);
                         scene.changePlayerMoving(true);
-                        Log.i(TAG, "onTouch: RIGHT");
                         break;
                 }
 
                 break;
             case MotionEvent.ACTION_UP:
                 scene.changePlayerMoving(false);
-                Log.i(TAG, "onTouch: ACTION_UP");
                 break;
             default:break;
 

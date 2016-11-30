@@ -115,23 +115,42 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
 
         player.onLogic();
 
-        for (int i = 0;i<bullets.size();i++){
+        for (int i = 0;i<enemies.size();i++){
+            enemies.get(i).onLogic();
+        }
 
+        for (int i = 0;i<bullets.size();i++){
+            bullets.get(i).onLogic();
+
+            bullets.get(i).checkCollision(player);
+            player.checkCollision(bullets.get(i));
+
+            for(int j=0;j<enemies.size();j++){
+
+                bullets.get(i).checkCollision(enemies.get(j));
+                enemies.get(j).checkCollision(bullets.get(i));
+
+                enemies.get(j).checkCollision(player);
+                player.checkCollision(enemies.get(j));
+
+            }
+
+        }
+
+        for (int i = 0;i<bullets.size();i++){
             if (bullets.get(i).isDead()){
                 bullets.remove(i);
                 SoundManager.getInstance().play("hit");
             }
-            else
-                bullets.get(i).onLogic();
-
-
         }
 
         for (int i = 0;i<enemies.size();i++){
-
-            enemies.get(i).onLogic();
-
+            if (enemies.get(i).isDead()){
+                enemies.remove(i);
+                SoundManager.getInstance().play("hit");
+            }
         }
+
 
 
 
@@ -166,9 +185,11 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
     @Override
     public void fire() {
 
-        if(player!=null&&!player.isDead())
+        if(player!=null&&!player.isDead()){
             player.fire();
             SoundManager.getInstance().play("fire");
+        }
+
 
     }
 }
