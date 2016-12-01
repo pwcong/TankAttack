@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TankAttack</string>
+    <string name="app_name">坦克世界</string>
     <string name="menu">菜单</string>
     <string name="back2menu">返回菜单</string>
     <string name="exit">退出游戏</string>
@@ -7,9 +7,15 @@
     <string name="life_time">存活时间：</string>
     <string name="seconds">s</string>
     <string name="again">再来一次</string>
-    <string name="tank_attack">坦克·大战</string>
+    <string name="tank_attack">坦克·世界</string>
     <string name="start_game">开始游戏</string>
     <string name="initializing">正在初始化</string>
     <string name="game_help">游戏帮助</string>
     <string name="top_score">最高记录</string>
+    <string name="introduction">简介：</string>
+    <string name="detail_introduction">这只是一个披着华丽外衣的超简单坦克小游戏 (雾)\n</string>
+    <string name="how2play">玩法：</string>
+    <string name="detail_how2play">前后左右，发射炮弹，就这样 (笑)\n</string>
+    <string name="level">难度：</string>
+    <string name="detail_level">炒鸡简单，只有坚持300秒的才是真男人 (微笑)\n</string>
 </resources>

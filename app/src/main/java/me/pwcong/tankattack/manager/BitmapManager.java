@@ -34,6 +34,8 @@ public class BitmapManager {
 
     private List<Bitmap> boom;
 
+    private Bitmap floor;
+
     private BitmapManager(){
 
         player = new ConcurrentHashMap<>();
@@ -42,6 +44,8 @@ public class BitmapManager {
         fastEnemy = new ConcurrentHashMap<>();
         largeEnemy = new ConcurrentHashMap<>();
         boom = new ArrayList<>();
+
+        floor = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.floor);
 
     }
 
@@ -172,5 +176,9 @@ public class BitmapManager {
 
     public List<Bitmap> getBoom() {
         return boom;
+    }
+
+    public Bitmap getFloor() {
+        return floor;
     }
 }

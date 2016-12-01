@@ -18,7 +18,7 @@ public class Const {
     public static final float FAST_ENEMY_SPEED = 14;
     public static final float LARGE_ENEMY_SPEED = 3;
 
-    public static final float PLAYER_BULLET_SPEED = 20;
+    public static final float PLAYER_BULLET_SPEED = 26;
     public static final float SIMPLE_BULLET_SPEED = 16;
     public static final float FAST_BULLET_SPEED = 24;
     public static final float LARGE_BULLET_SPEED = 12;

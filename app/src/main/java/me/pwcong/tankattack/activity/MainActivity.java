@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import me.pwcong.tankattack.R;
 import me.pwcong.tankattack.main.controller.BaseController;
 import me.pwcong.tankattack.main.entity.BaseEntity;
+import me.pwcong.tankattack.main.scene.FirstScene;
 import me.pwcong.tankattack.main.view.BaseView;
 import me.pwcong.tankattack.manager.ActivityManager;
 import me.pwcong.tankattack.manager.SoundManager;
@@ -58,6 +59,8 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
     protected void initVariable(Bundle savedInstanceState) {
 
         scene = (BaseController.FirstScene) findViewById(R.id.scene);
+        ((FirstScene)scene).setView(this);
+
         initController();
         initMenu();
         initLose();
@@ -243,21 +246,27 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
     @Override
     public void showLose() {
 
-        rootLose.setVisibility(View.VISIBLE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rootLose.setVisibility(View.VISIBLE);
+            }
+        });
+
 
     }
 
-    @Override
-    public void hideLose() {
-
-        rootLose.setVisibility(View.GONE);
-
-    }
 
     @Override
-    public void setSecondText(String text) {
+    public void setSecondText(final String text) {
 
-        text_second.setText(text);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                text_second.setText(text);
+            }
+        });
+
 
     }
 

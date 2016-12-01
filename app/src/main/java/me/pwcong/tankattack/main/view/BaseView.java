@@ -13,7 +13,6 @@ public interface BaseView {
         void showController();
         void hideController();
         void showLose();
-        void hideLose();
         void setSecondText(String text);
 
     }

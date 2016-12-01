@@ -13,9 +13,11 @@ import me.pwcong.tankattack.config.Const;
  * Created by Pwcong on 2016/11/29.
  */
 
-public abstract class BaseScene extends SurfaceView implements SurfaceHolder.Callback,Runnable {
+public abstract class BaseScene<T> extends SurfaceView implements SurfaceHolder.Callback,Runnable {
 
     public final String TAG = getClass().getSimpleName();
+
+    private T view;
 
     public static final int PLAY = 1;
     public static final int PAUSE   = -1;
@@ -59,7 +61,7 @@ public abstract class BaseScene extends SurfaceView implements SurfaceHolder.Cal
 
         setStatus(PLAY);
 
-        currentTime = 0;
+        currentTime = 1;
 
         start = true;
 
@@ -152,6 +154,14 @@ public abstract class BaseScene extends SurfaceView implements SurfaceHolder.Cal
     protected abstract void doDraw(Canvas canvas);
 
     protected abstract void doLogic();
+
+    public T getView() {
+        return view;
+    }
+
+    public void setView(T view) {
+        this.view = view;
+    }
 
     public int getStatus() {
         return status;
