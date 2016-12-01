@@ -25,10 +25,10 @@ public class BaseEnemy extends BaseEntity implements BaseEntity.Behavior{
     int current = 0;
     int moveDuration = 100;
     int fireDuration = 30;
+    float fireSalt = Const.SIMPLE_ENEMY_FIRE_SALT;
 
-    public BaseEnemy(int flag, int life, float posX, float posY, float screenWidth, float screenHeight, Map<String, Bitmap> enemy, float speed) {
+    public BaseEnemy(int flag, int life, float posX, float posY, float screenWidth, float screenHeight, float speed) {
         super(flag, life, posX, posY,screenWidth,screenHeight);
-        this.enemy = enemy;
         this.speed = speed;
 
         initVariable();
@@ -38,8 +38,7 @@ public class BaseEnemy extends BaseEntity implements BaseEntity.Behavior{
     @Override
     protected void initVariable() {
 
-        setSelfWidth(enemy.get(STATUS_UP).getWidth());
-        setSelfHeight(enemy.get(STATUS_UP).getHeight());
+        status = getRandomStatus();
 
         setPosX(getPosX()-getSelfWidth()/2);
         setPosY(getPosY()-getSelfHeight()/2);
@@ -47,13 +46,13 @@ public class BaseEnemy extends BaseEntity implements BaseEntity.Behavior{
         paint = new Paint();
         paint.setAntiAlias(true);
 
-        status = getRandomStatus();
+
     }
 
     @Override
     public void onDraw(Canvas canvas) {
 
-        if(!isDead()){
+        if(enemy!=null && !isDead()){
 
             switch (status){
 
@@ -87,7 +86,7 @@ public class BaseEnemy extends BaseEntity implements BaseEntity.Behavior{
     protected void autoFire(){
 
         if(current%fireDuration==0)
-            if(Math.random()> Const.BASE_ENEMY_FIRE_SALT)
+            if(Math.random()> fireSalt)
                 if(onActionListener!=null)
                     onActionListener.onFire();
 
@@ -147,30 +146,20 @@ public class BaseEnemy extends BaseEntity implements BaseEntity.Behavior{
 
     }
 
-//    public void checkCollision(BaseEntity other){
-//
-//        if(other.getFlag() == BaseEntity.FLAG_PLAYER){
-//
-//            if(Math.abs(getPosX()-other.getPosX() + (getSelfWidth()+other.getSelfWidth())/2)<(getSelfWidth()+other.getSelfWidth())/2 &&
-//                    Math.abs(getPosY()-other.getPosY() + (getSelfHeight()+other.getSelfHeight())/2)<(getSelfHeight()+other.getSelfHeight())/2){
-//
-//                if(getLife()>0)
-//                    setLife(getLife()-1);
-//
-//                if(other.getLife()>0)
-//                    other.setLife(other.getLife()-1);
-//
-//            }
-//        }
-//
-//    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Map<String, Bitmap> getEnemy() {
+        return enemy;
+    }
+
+    public void setEnemy(Map<String, Bitmap> enemy) {
+        this.enemy = enemy;
     }
 
     public void setOnActionListener(OnActionListener onActionListener) {
@@ -182,8 +171,6 @@ public class BaseEnemy extends BaseEntity implements BaseEntity.Behavior{
         void onFire();
 
     }
-
-
 
 
 }

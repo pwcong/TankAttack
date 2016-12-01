@@ -86,7 +86,7 @@ public class Bullet extends BaseEntity implements BaseEntity.Behavior {
 
     public void checkCollision(BaseEntity other){
 
-        if(!other.isDead() && getFlag() != other.getFlag()){
+        if(!isDead() && !other.isDead() && getFlag() != other.getFlag()){
 
             if(getPosX() + getSelfWidth()/2>other.getPosX() &&
                     getPosX() + getSelfWidth()/2 <other.getPosX()+other.getSelfWidth() &&

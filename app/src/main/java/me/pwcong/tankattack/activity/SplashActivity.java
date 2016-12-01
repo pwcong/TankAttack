@@ -30,7 +30,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             protected Void doInBackground(Void... voids) {
 
-                BitmapManager.getInstance().loadDrawer();
+                BitmapManager.getInstance().loadBitmap();
                 SoundManager.getInstance().loadSound();
 
                 return null;

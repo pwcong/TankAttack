@@ -11,8 +11,11 @@ import me.pwcong.tankattack.config.Const;
 import me.pwcong.tankattack.main.controller.BaseController;
 import me.pwcong.tankattack.main.entity.BaseEntity;
 import me.pwcong.tankattack.main.entity.Bullet;
+import me.pwcong.tankattack.main.entity.FastEnemy;
+import me.pwcong.tankattack.main.entity.LargeEnemy;
 import me.pwcong.tankattack.main.entity.Player;
 import me.pwcong.tankattack.main.entity.BaseEnemy;
+import me.pwcong.tankattack.main.entity.SimpleEnemy;
 import me.pwcong.tankattack.manager.BitmapManager;
 import me.pwcong.tankattack.manager.SoundManager;
 
@@ -66,8 +69,8 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
         });
 
         enemies = new Vector<>();
-        final BaseEnemy simpleEnemy = new BaseEnemy(BaseEntity.FLAG_ENEMY,1,screenWidth/2,100,screenWidth,screenHeight,
-                BitmapManager.getInstance().getSimpleEnemy(),8);
+        final SimpleEnemy simpleEnemy = new SimpleEnemy(BaseEntity.FLAG_ENEMY,1,screenWidth/2,100,screenWidth,screenHeight,Const.SIMPLE_ENEMY_SPEED,
+                BitmapManager.getInstance().getSimpleEnemy());
 
         simpleEnemy.setOnActionListener(new BaseEnemy.OnActionListener() {
             @Override
@@ -78,7 +81,7 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
                                 simpleEnemy.getPosY()+simpleEnemy.getSelfHeight()/2-20,
                                 screenWidth,screenHeight,
                                 BitmapManager.getInstance().getBullet().get("enemy"),
-                                Const.BASE_BULLET_SPEED,
+                                Const.SIMPLE_BULLET_SPEED,
                                 simpleEnemy.getStatus()
                         )
                 );
@@ -86,6 +89,51 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
         });
 
         enemies.add(simpleEnemy);
+
+        final FastEnemy fastEnemy = new FastEnemy(BaseEntity.FLAG_ENEMY,1,100,200,screenWidth,screenHeight,
+                Const.FAST_ENEMY_SPEED,BitmapManager.getInstance().getFastEnemy());
+
+        fastEnemy.setOnActionListener(new BaseEnemy.OnActionListener() {
+            @Override
+            public void onFire() {
+                bullets.add(new Bullet(
+                                BaseEntity.FLAG_ENEMY,1,
+                                fastEnemy.getPosX()+fastEnemy.getSelfWidth()/2-20,
+                                fastEnemy.getPosY()+fastEnemy.getSelfHeight()/2-20,
+                                screenWidth,screenHeight,
+                                BitmapManager.getInstance().getBullet().get("enemy"),
+                                Const.FAST_BULLET_SPEED,
+                                fastEnemy.getStatus()
+                        )
+                );
+            }
+        });
+
+        enemies.add(fastEnemy);
+
+        final LargeEnemy largeEnemy = new LargeEnemy(BaseEntity.FLAG_ENEMY,4,200,100,screenWidth,screenHeight,
+                Const.LARGE_ENEMY_SPEED,BitmapManager.getInstance().getLargeEnemy());
+
+        largeEnemy.setOnActionListener(new BaseEnemy.OnActionListener() {
+            @Override
+            public void onFire() {
+                bullets.add(new Bullet(
+                                BaseEntity.FLAG_ENEMY,1,
+                                largeEnemy.getPosX()+largeEnemy.getSelfWidth()/2-20,
+                                largeEnemy.getPosY()+largeEnemy.getSelfHeight()/2-20,
+                                screenWidth,screenHeight,
+                                BitmapManager.getInstance().getBullet().get("enemy"),
+                                Const.LARGE_BULLET_SPEED,
+                                largeEnemy.getStatus()
+                        )
+                );
+            }
+        });
+
+        enemies.add(largeEnemy);
+
+
+
 
     }
 
