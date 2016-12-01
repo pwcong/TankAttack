@@ -1,4 +1,4 @@
-package me.pwcong.tankattack.main.entity;
+package me.pwcong.tankattack.main.param;
 
 /**
  * Created by Pwcong on 2016/11/30.

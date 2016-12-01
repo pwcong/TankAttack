@@ -5,18 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
 import me.pwcong.tankattack.config.Const;
 import me.pwcong.tankattack.main.controller.BaseController;
 import me.pwcong.tankattack.main.entity.BaseEntity;
 import me.pwcong.tankattack.main.entity.Bullet;
 import me.pwcong.tankattack.main.entity.Player;
-import me.pwcong.tankattack.main.entity.SimpleEnemy;
-import me.pwcong.tankattack.main.entity.Vector2;
+import me.pwcong.tankattack.main.entity.BaseEnemy;
 import me.pwcong.tankattack.manager.BitmapManager;
 import me.pwcong.tankattack.manager.SoundManager;
 
@@ -32,7 +28,7 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
 
     Player player;
 
-    Vector<SimpleEnemy> enemies;
+    Vector<BaseEnemy> enemies;
 
     public FirstScene(Context context) {
         super(context);
@@ -47,7 +43,7 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
 
         bullets = new Vector<>();
 
-        player = new Player(BaseEntity.FLAG_PLAYER,screenWidth/2,screenHeight/2,screenWidth,screenHeight,
+        player = new Player(BaseEntity.FLAG_PLAYER,1,screenWidth/2,screenHeight/2,screenWidth,screenHeight,
                 BitmapManager.getInstance().getPlayer(), Const.PLAYER_SPEED);
 
         player.setOnActionListener(new Player.OnActionListener() {
@@ -56,11 +52,12 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
 
                 bullets.add(new Bullet(
                                 BaseEntity.FLAG_PLAYER,
+                                1,
                                 player.getPosX()+player.getSelfWidth()/2-20,
                                 player.getPosY()+player.getSelfHeight()/2-20,
                                 screenWidth,screenHeight,
                                 BitmapManager.getInstance().getBullet().get("player"),
-                                Const.BULLET_SPEED,
+                                Const.PLAYER_BULLET_SPEED,
                                 player.getStatus()
                         )
                 );
@@ -69,19 +66,19 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
         });
 
         enemies = new Vector<>();
-        final SimpleEnemy simpleEnemy = new SimpleEnemy(BaseEntity.FLAG_ENEMY,screenWidth/2,100,screenWidth,screenHeight,
+        final BaseEnemy simpleEnemy = new BaseEnemy(BaseEntity.FLAG_ENEMY,1,screenWidth/2,100,screenWidth,screenHeight,
                 BitmapManager.getInstance().getSimpleEnemy(),8);
 
-        simpleEnemy.setOnActionListener(new SimpleEnemy.OnActionListener() {
+        simpleEnemy.setOnActionListener(new BaseEnemy.OnActionListener() {
             @Override
             public void onFire() {
                 bullets.add(new Bullet(
-                                BaseEntity.FLAG_ENEMY,
+                                BaseEntity.FLAG_ENEMY,1,
                                 simpleEnemy.getPosX()+simpleEnemy.getSelfWidth()/2-20,
                                 simpleEnemy.getPosY()+simpleEnemy.getSelfHeight()/2-20,
                                 screenWidth,screenHeight,
                                 BitmapManager.getInstance().getBullet().get("enemy"),
-                                Const.BULLET_SPEED,
+                                Const.BASE_BULLET_SPEED,
                                 simpleEnemy.getStatus()
                         )
                 );
@@ -123,15 +120,10 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
             bullets.get(i).onLogic();
 
             bullets.get(i).checkCollision(player);
-            player.checkCollision(bullets.get(i));
 
             for(int j=0;j<enemies.size();j++){
 
                 bullets.get(i).checkCollision(enemies.get(j));
-                enemies.get(j).checkCollision(bullets.get(i));
-
-                enemies.get(j).checkCollision(player);
-                player.checkCollision(enemies.get(j));
 
             }
 
@@ -147,7 +139,7 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
         for (int i = 0;i<enemies.size();i++){
             if (enemies.get(i).isDead()){
                 enemies.remove(i);
-                SoundManager.getInstance().play("hit");
+                SoundManager.getInstance().play("blast");
             }
         }
 

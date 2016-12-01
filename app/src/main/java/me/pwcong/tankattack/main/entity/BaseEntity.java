@@ -21,6 +21,8 @@ public abstract class BaseEntity {
 
     private int flag;
 
+    private int life;
+
     private float posX;
     private float posY;
 
@@ -30,8 +32,9 @@ public abstract class BaseEntity {
     private float selfWidth;
     private float selfHeight;
 
-    public BaseEntity(int flag, float posX, float posY, float screenWidth, float screenHeight) {
+    public BaseEntity(int flag, int life, float posX, float posY, float screenWidth, float screenHeight) {
         this.flag = flag;
+        this.life = life;
         this.posX = posX;
         this.posY = posY;
         this.screenWidth = screenWidth;
@@ -54,6 +57,14 @@ public abstract class BaseEntity {
 
     public void setFlag(int flag) {
         this.flag = flag;
+    }
+
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
     }
 
     public float getPosX() {

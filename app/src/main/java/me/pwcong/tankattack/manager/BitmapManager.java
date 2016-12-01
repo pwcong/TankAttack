@@ -26,11 +26,14 @@ public class BitmapManager {
 
     private Map<String,Bitmap> simpleEnemy;
 
+    private Map<String,Bitmap> fastEnemy;
+
     private BitmapManager(){
 
         player = new ConcurrentHashMap<>();
         bullet = new ConcurrentHashMap<>();
         simpleEnemy = new ConcurrentHashMap<>();
+        fastEnemy = new ConcurrentHashMap<>();
 
     }
 
@@ -67,6 +70,8 @@ public class BitmapManager {
                 BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.enemy1_l),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
         simpleEnemy.put(BaseEntity.STATUS_RIGHT,
                 BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.enemy1_r),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
+
+
 
     }
 

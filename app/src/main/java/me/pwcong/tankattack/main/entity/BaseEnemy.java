@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import java.util.Map;
-import java.util.Random;
 
 import me.pwcong.tankattack.config.Const;
 
@@ -13,9 +12,9 @@ import me.pwcong.tankattack.config.Const;
  * Created by Pwcong on 2016/11/30.
  */
 
-public class SimpleEnemy extends BaseEntity implements BaseEntity.Behavior{
+public class BaseEnemy extends BaseEntity implements BaseEntity.Behavior{
 
-    private Map<String,Bitmap> simpleEnemy;
+    private Map<String,Bitmap> enemy;
     private float speed;
 
     private OnActionListener onActionListener;
@@ -24,11 +23,12 @@ public class SimpleEnemy extends BaseEntity implements BaseEntity.Behavior{
     String status;
 
     int current = 0;
-    int duration = 100;
+    int moveDuration = 100;
+    int fireDuration = 30;
 
-    public SimpleEnemy(int flag, float posX, float posY, float screenWidth, float screenHeight, Map<String, Bitmap> simpleEnemy, float speed) {
-        super(flag, posX, posY,screenWidth,screenHeight);
-        this.simpleEnemy = simpleEnemy;
+    public BaseEnemy(int flag, int life, float posX, float posY, float screenWidth, float screenHeight, Map<String, Bitmap> enemy, float speed) {
+        super(flag, life, posX, posY,screenWidth,screenHeight);
+        this.enemy = enemy;
         this.speed = speed;
 
         initVariable();
@@ -38,8 +38,8 @@ public class SimpleEnemy extends BaseEntity implements BaseEntity.Behavior{
     @Override
     protected void initVariable() {
 
-        setSelfWidth(simpleEnemy.get(STATUS_UP).getWidth());
-        setSelfHeight(simpleEnemy.get(STATUS_UP).getHeight());
+        setSelfWidth(enemy.get(STATUS_UP).getWidth());
+        setSelfHeight(enemy.get(STATUS_UP).getHeight());
 
         setPosX(getPosX()-getSelfWidth()/2);
         setPosY(getPosY()-getSelfHeight()/2);
@@ -58,16 +58,16 @@ public class SimpleEnemy extends BaseEntity implements BaseEntity.Behavior{
             switch (status){
 
                 case STATUS_LEFT:
-                    canvas.drawBitmap(simpleEnemy.get(STATUS_LEFT),getPosX(),getPosY(),paint);
+                    canvas.drawBitmap(enemy.get(STATUS_LEFT),getPosX(),getPosY(),paint);
                     break;
                 case STATUS_RIGHT:
-                    canvas.drawBitmap(simpleEnemy.get(STATUS_RIGHT),getPosX(),getPosY(),paint);
+                    canvas.drawBitmap(enemy.get(STATUS_RIGHT),getPosX(),getPosY(),paint);
                     break;
                 case STATUS_UP:
-                    canvas.drawBitmap(simpleEnemy.get(STATUS_UP),getPosX(),getPosY(),paint);
+                    canvas.drawBitmap(enemy.get(STATUS_UP),getPosX(),getPosY(),paint);
                     break;
                 case STATUS_DOWN:
-                    canvas.drawBitmap(simpleEnemy.get(STATUS_DOWN),getPosX(),getPosY(),paint);
+                    canvas.drawBitmap(enemy.get(STATUS_DOWN),getPosX(),getPosY(),paint);
                     break;
                 default:break;
 
@@ -81,22 +81,23 @@ public class SimpleEnemy extends BaseEntity implements BaseEntity.Behavior{
     public void onLogic() {
         autoMove();
         autoFire();
+        autoCheckLife();
     }
 
-    private void autoFire(){
+    protected void autoFire(){
 
-        if(current%30==0)
-            if(Math.random()> Const.SIMPLE_ENEMY_FIRE_SALT)
+        if(current%fireDuration==0)
+            if(Math.random()> Const.BASE_ENEMY_FIRE_SALT)
                 if(onActionListener!=null)
                     onActionListener.onFire();
 
 
     }
 
-    private void autoMove(){
+    protected void autoMove(){
 
         current++;
-        if (current>duration){
+        if (current>moveDuration){
             setStatus(getRandomStatus());
             current = 0;
         }
@@ -139,19 +140,30 @@ public class SimpleEnemy extends BaseEntity implements BaseEntity.Behavior{
 
     }
 
-    public void checkCollision(BaseEntity other){
+    protected void autoCheckLife(){
 
-        if(other.getFlag() == BaseEntity.FLAG_PLAYER){
-
-            if(Math.abs(getPosX()-other.getPosX())<(getSelfWidth()+other.getSelfWidth())/2 &&
-                    Math.abs(getPosY()-other.getPosY())<(getSelfHeight()+other.getSelfHeight())/2){
-
-                setDead(true);
-
-            }
-        }
+        if(getLife()<=0)
+            setDead(true);
 
     }
+
+//    public void checkCollision(BaseEntity other){
+//
+//        if(other.getFlag() == BaseEntity.FLAG_PLAYER){
+//
+//            if(Math.abs(getPosX()-other.getPosX() + (getSelfWidth()+other.getSelfWidth())/2)<(getSelfWidth()+other.getSelfWidth())/2 &&
+//                    Math.abs(getPosY()-other.getPosY() + (getSelfHeight()+other.getSelfHeight())/2)<(getSelfHeight()+other.getSelfHeight())/2){
+//
+//                if(getLife()>0)
+//                    setLife(getLife()-1);
+//
+//                if(other.getLife()>0)
+//                    other.setLife(other.getLife()-1);
+//
+//            }
+//        }
+//
+//    }
 
     public String getStatus() {
         return status;

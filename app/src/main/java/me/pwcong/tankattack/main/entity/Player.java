@@ -21,8 +21,8 @@ public class Player extends BaseEntity implements BaseEntity.Behavior{
     String status;
     boolean isMoving;
 
-    public Player(int flag, float posX, float posY, float screenWidth, float screenHeight, Map<String, Bitmap> player, float speed) {
-        super(flag, posX, posY,screenWidth,screenHeight);
+    public Player(int flag, int life, float posX, float posY, float screenWidth, float screenHeight, Map<String, Bitmap> player, float speed) {
+        super(flag,life, posX, posY,screenWidth,screenHeight);
         this.player = player;
         this.speed = speed;
 
@@ -77,6 +77,7 @@ public class Player extends BaseEntity implements BaseEntity.Behavior{
     @Override
     public void onLogic() {
         autoMove();
+        autoCheckLife();
     }
 
     private void autoMove(){
@@ -114,18 +115,28 @@ public class Player extends BaseEntity implements BaseEntity.Behavior{
 
     }
 
-    public void checkCollision(BaseEntity other){
+    private void autoCheckLife(){
 
-        if(other.getFlag() == BaseEntity.FLAG_ENEMY){
+        if(getLife()<=0)
+            setDead(true);
 
-            if(Math.abs(getPosX()-other.getPosX())<(getSelfWidth()+other.getSelfWidth())/2 &&
-                    Math.abs(getPosY()-other.getPosY())<(getSelfHeight()+other.getSelfHeight())/2){
-
-                setDead(true);
-
-            }
-        }
     }
+
+//    public void checkCollision(BaseEntity other){
+//
+//        if(other.getFlag() == BaseEntity.FLAG_ENEMY){
+//
+//            if(Math.abs(getPosX()-other.getPosX() + (getSelfWidth()+other.getSelfWidth())/2)<(getSelfWidth()+other.getSelfWidth())/2 &&
+//                    Math.abs(getPosY()-other.getPosY() + (getSelfHeight()+other.getSelfHeight())/2)<(getSelfHeight()+other.getSelfHeight())/2){
+//
+//                if(getLife()>0)
+//                    setLife(getLife()-1);
+//
+//                other.setDead(true);
+//
+//            }
+//        }
+//    }
 
     public String getStatus() {
         return status;

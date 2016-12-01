@@ -23,8 +23,10 @@ public abstract class BaseScene extends SurfaceView implements SurfaceHolder.Cal
     private int status;
 
     Context context;
-
     SurfaceHolder surfaceHolder;
+
+    long currentTime;
+
     float screenWidth;
     float screenHeight;
 
@@ -57,6 +59,8 @@ public abstract class BaseScene extends SurfaceView implements SurfaceHolder.Cal
 
         setStatus(START);
 
+        currentTime = 0;
+
         start = true;
 
         new Thread(this).start();
@@ -81,6 +85,8 @@ public abstract class BaseScene extends SurfaceView implements SurfaceHolder.Cal
     public void run() {
 
         while (start){
+
+            currentTime++;
 
             Canvas canvas = surfaceHolder.lockCanvas();
 

@@ -3,7 +3,8 @@ package me.pwcong.tankattack.main.entity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
+
+import me.pwcong.tankattack.main.param.Vector2;
 
 
 /**
@@ -23,8 +24,8 @@ public class Bullet extends BaseEntity implements BaseEntity.Behavior {
 
     Paint paint;
 
-    public Bullet(int flag, float posX, float posY, float screenWidth, float screenHeight, Bitmap bullet, float speed, String status) {
-        super(flag, posX, posY, screenWidth, screenHeight);
+    public Bullet(int flag, int life, float posX, float posY, float screenWidth, float screenHeight, Bitmap bullet, float speed, String status) {
+        super(flag, life, posX, posY, screenWidth, screenHeight);
         this.bullet = bullet;
         this.speed = speed;
         this.status = status;
@@ -85,16 +86,17 @@ public class Bullet extends BaseEntity implements BaseEntity.Behavior {
 
     public void checkCollision(BaseEntity other){
 
+        if(!other.isDead() && getFlag() != other.getFlag()){
 
-
-        if(getFlag() != other.getFlag()){
-
-            if(getPosX()>other.getPosX() && getPosX()<other.getPosX()+other.getSelfWidth() &&
-                    getPosY()>other.getPosY()&& getPosY()<other.getPosY()+other.getSelfHeight()){
-
-                Log.i(TAG, "checkCollision: OK");
+            if(getPosX() + getSelfWidth()/2>other.getPosX() &&
+                    getPosX() + getSelfWidth()/2 <other.getPosX()+other.getSelfWidth() &&
+                    getPosY() + getSelfHeight()/2 > other.getPosY()&&
+                    getPosY() + getSelfHeight()/2 <other.getPosY()+other.getSelfHeight()){
 
                 setDead(true);
+
+                if(other.getLife()>0)
+                    other.setLife(other.getLife()-1);
 
             }
         }
