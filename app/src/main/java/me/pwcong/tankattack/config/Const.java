@@ -6,6 +6,9 @@ package me.pwcong.tankattack.config;
 
 public class Const {
 
+    public static final String PRE_NAME = "tank_attack";
+    public static final String KEY_SCORE = "score";
+
     public static final int FPS = 30;
 
     public static final float BITMAP_SCALE = 0.7f;

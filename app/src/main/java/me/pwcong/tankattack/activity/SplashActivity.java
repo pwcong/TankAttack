@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import me.pwcong.tankattack.R;
 import me.pwcong.tankattack.manager.BitmapManager;
 import me.pwcong.tankattack.manager.SoundManager;
@@ -40,12 +43,17 @@ public class SplashActivity extends BaseActivity {
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
-                runOnUiThread(new Runnable() {
+                new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        redirect2MainActivity();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                redirect2MenuActivity();
+                            }
+                        });
                     }
-                });
+                },1000);
 
 
             }
@@ -53,9 +61,9 @@ public class SplashActivity extends BaseActivity {
 
     }
 
-    private void redirect2MainActivity(){
+    private void redirect2MenuActivity(){
 
-        startActivity(new Intent(SplashActivity.this,MainActivity.class));
+        startActivity(new Intent(SplashActivity.this,MenuActivity.class));
         finish();
 
     }

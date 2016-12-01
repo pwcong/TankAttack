@@ -1,5 +1,6 @@
 package me.pwcong.tankattack.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -112,6 +113,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
             @Override
             public void call(Void aVoid) {
 
+                redirect2MenuActivity();
 
             }
         });
@@ -133,6 +135,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
             @Override
             public void call(Void aVoid) {
 
+                redirect2MenuActivity();
 
             }
         });
@@ -142,6 +145,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
             @Override
             public void call(Void aVoid) {
 
+                ActivityManager.getInstance().removeAll();
 
             }
         });
@@ -152,15 +156,13 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
             @Override
             public void call(Void aVoid) {
 
-
+                redirect2MainActivity();
 
             }
         });
 
 
         text_second = (TextView) findViewById(R.id.text_second);
-
-
 
     }
 
@@ -265,6 +267,20 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
         scene.pause();
         showMenu();
         hideController();
+
+    }
+
+    private void redirect2MenuActivity(){
+
+        startActivity(new Intent(MainActivity.this,MenuActivity.class));
+        finish();
+
+    }
+
+    private void redirect2MainActivity(){
+
+        startActivity(new Intent(MainActivity.this,MainActivity.class));
+        finish();
 
     }
 }
