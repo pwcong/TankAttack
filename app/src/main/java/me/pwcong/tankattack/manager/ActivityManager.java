@@ -52,7 +52,7 @@ public class ActivityManager {
             public void run() {
                 System.exit(0);
             }
-        },3000);
+        },1500);
 
     }
 

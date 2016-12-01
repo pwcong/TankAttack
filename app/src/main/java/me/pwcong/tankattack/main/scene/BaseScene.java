@@ -17,7 +17,7 @@ public abstract class BaseScene extends SurfaceView implements SurfaceHolder.Cal
 
     public final String TAG = getClass().getSimpleName();
 
-    public static final int START   = 1;
+    public static final int PLAY = 1;
     public static final int PAUSE   = -1;
 
     private int status;
@@ -57,7 +57,7 @@ public abstract class BaseScene extends SurfaceView implements SurfaceHolder.Cal
 
         initVariable();
 
-        setStatus(START);
+        setStatus(PLAY);
 
         currentTime = 0;
 
@@ -88,38 +88,42 @@ public abstract class BaseScene extends SurfaceView implements SurfaceHolder.Cal
 
             currentTime++;
 
-            Canvas canvas = surfaceHolder.lockCanvas();
+            switch (getStatus()){
 
-            try {
+                case PLAY:
 
-                if(canvas!=null){
+                    Canvas canvas = surfaceHolder.lockCanvas();
 
-                    switch (getStatus()){
-                        case START:
+                    try {
+
+                        if(canvas!=null){
+
                             doDraw(canvas);
                             doLogic();
-                            break;
-                        case PAUSE:
+                        }
 
-                            break;
+                        Thread.sleep(Const.FPS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }finally {
 
-                        default:break;
+                        try {
+                            surfaceHolder.unlockCanvasAndPost(canvas);
+                        }catch (Exception ignored){
+
+                        }
+
                     }
 
-                }
 
-                Thread.sleep(Const.FPS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }finally {
+                    break;
+                case PAUSE:break;
+                default:break;
 
-                try {
-                    surfaceHolder.unlockCanvasAndPost(canvas);
-                }catch (Exception ignored){
-
-                }
 
             }
+
+
 
         }
 

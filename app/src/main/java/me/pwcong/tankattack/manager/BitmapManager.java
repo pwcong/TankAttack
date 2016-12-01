@@ -3,6 +3,8 @@ package me.pwcong.tankattack.manager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,6 +32,8 @@ public class BitmapManager {
 
     private Map<String,Map<String,Bitmap>> largeEnemy;
 
+    private List<Bitmap> boom;
+
     private BitmapManager(){
 
         player = new ConcurrentHashMap<>();
@@ -37,6 +41,7 @@ public class BitmapManager {
         simpleEnemy = new ConcurrentHashMap<>();
         fastEnemy = new ConcurrentHashMap<>();
         largeEnemy = new ConcurrentHashMap<>();
+        boom = new ArrayList<>();
 
     }
 
@@ -132,6 +137,15 @@ public class BitmapManager {
         largeEnemy.put("3",enemy3_3);
         largeEnemy.put("4",enemy3_4);
 
+        boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast1),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
+        boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast2),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
+        boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast3),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
+        boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast4),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
+        boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast5),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
+        boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast6),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
+        boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast7),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
+        boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast8),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
+
 
 
     }
@@ -154,5 +168,9 @@ public class BitmapManager {
 
     public Map<String, Map<String, Bitmap>> getLargeEnemy() {
         return largeEnemy;
+    }
+
+    public List<Bitmap> getBoom() {
+        return boom;
     }
 }

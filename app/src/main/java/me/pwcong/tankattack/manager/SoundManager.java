@@ -23,7 +23,7 @@ public class SoundManager {
 
     private SoundManager(){
 
-        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC,1);
+        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC,1);
         sounds = new ConcurrentHashMap<>();
 
     }
@@ -38,7 +38,7 @@ public class SoundManager {
     public void loadSound(){
 
         sounds.put("add",soundPool.load(App.getInstance(), R.raw.add,1));
-        sounds.put("start",soundPool.load(App.getInstance(), R.raw.start,1));
+        sounds.put("play",soundPool.load(App.getInstance(), R.raw.start,1));
         sounds.put("fire",soundPool.load(App.getInstance(), R.raw.fire,1));
         sounds.put("hit",soundPool.load(App.getInstance(), R.raw.hit,1));
         sounds.put("blast",soundPool.load(App.getInstance(), R.raw.blast,1));

@@ -10,12 +10,12 @@ import java.util.Vector;
 import me.pwcong.tankattack.config.Const;
 import me.pwcong.tankattack.main.controller.BaseController;
 import me.pwcong.tankattack.main.entity.BaseEntity;
+import me.pwcong.tankattack.main.entity.Boom;
 import me.pwcong.tankattack.main.entity.Bullet;
-import me.pwcong.tankattack.main.entity.FastEnemy;
-import me.pwcong.tankattack.main.entity.LargeEnemy;
+import me.pwcong.tankattack.main.util.EnemyCreater;
 import me.pwcong.tankattack.main.entity.Player;
 import me.pwcong.tankattack.main.entity.BaseEnemy;
-import me.pwcong.tankattack.main.entity.SimpleEnemy;
+import me.pwcong.tankattack.main.view.BaseView;
 import me.pwcong.tankattack.manager.BitmapManager;
 import me.pwcong.tankattack.manager.SoundManager;
 
@@ -27,11 +27,12 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
 
     public final String TAG = getClass().getSimpleName();
 
-    Vector<Bullet> bullets;
-
-    Player player;
+    BaseView.MainActivityView view;
 
     Vector<BaseEnemy> enemies;
+    Vector<Bullet> bullets;
+    Player player;
+    Vector<Boom> booms;
 
     public FirstScene(Context context) {
         super(context);
@@ -44,7 +45,12 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
     @Override
     protected void initVariable() {
 
+        enemies = new Vector<>();
         bullets = new Vector<>();
+
+        EnemyCreater.createSimpleEnemy(100,100,screenWidth,screenHeight,enemies,bullets);
+        EnemyCreater.createFastEnemy(200,100,screenWidth,screenHeight,enemies,bullets);
+        EnemyCreater.createLargeEnemy(300,100,screenWidth,screenHeight,enemies,bullets);
 
         player = new Player(BaseEntity.FLAG_PLAYER,1,screenWidth/2,screenHeight/2,screenWidth,screenHeight,
                 BitmapManager.getInstance().getPlayer(), Const.PLAYER_SPEED);
@@ -68,71 +74,10 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
             }
         });
 
-        enemies = new Vector<>();
-        final SimpleEnemy simpleEnemy = new SimpleEnemy(BaseEntity.FLAG_ENEMY,1,screenWidth/2,100,screenWidth,screenHeight,Const.SIMPLE_ENEMY_SPEED,
-                BitmapManager.getInstance().getSimpleEnemy());
-
-        simpleEnemy.setOnActionListener(new BaseEnemy.OnActionListener() {
-            @Override
-            public void onFire() {
-                bullets.add(new Bullet(
-                                BaseEntity.FLAG_ENEMY,1,
-                                simpleEnemy.getPosX()+simpleEnemy.getSelfWidth()/2-20,
-                                simpleEnemy.getPosY()+simpleEnemy.getSelfHeight()/2-20,
-                                screenWidth,screenHeight,
-                                BitmapManager.getInstance().getBullet().get("enemy"),
-                                Const.SIMPLE_BULLET_SPEED,
-                                simpleEnemy.getStatus()
-                        )
-                );
-            }
-        });
-
-        enemies.add(simpleEnemy);
-
-        final FastEnemy fastEnemy = new FastEnemy(BaseEntity.FLAG_ENEMY,1,100,200,screenWidth,screenHeight,
-                Const.FAST_ENEMY_SPEED,BitmapManager.getInstance().getFastEnemy());
-
-        fastEnemy.setOnActionListener(new BaseEnemy.OnActionListener() {
-            @Override
-            public void onFire() {
-                bullets.add(new Bullet(
-                                BaseEntity.FLAG_ENEMY,1,
-                                fastEnemy.getPosX()+fastEnemy.getSelfWidth()/2-20,
-                                fastEnemy.getPosY()+fastEnemy.getSelfHeight()/2-20,
-                                screenWidth,screenHeight,
-                                BitmapManager.getInstance().getBullet().get("enemy"),
-                                Const.FAST_BULLET_SPEED,
-                                fastEnemy.getStatus()
-                        )
-                );
-            }
-        });
-
-        enemies.add(fastEnemy);
-
-        final LargeEnemy largeEnemy = new LargeEnemy(BaseEntity.FLAG_ENEMY,4,200,100,screenWidth,screenHeight,
-                Const.LARGE_ENEMY_SPEED,BitmapManager.getInstance().getLargeEnemy());
-
-        largeEnemy.setOnActionListener(new BaseEnemy.OnActionListener() {
-            @Override
-            public void onFire() {
-                bullets.add(new Bullet(
-                                BaseEntity.FLAG_ENEMY,1,
-                                largeEnemy.getPosX()+largeEnemy.getSelfWidth()/2-20,
-                                largeEnemy.getPosY()+largeEnemy.getSelfHeight()/2-20,
-                                screenWidth,screenHeight,
-                                BitmapManager.getInstance().getBullet().get("enemy"),
-                                Const.LARGE_BULLET_SPEED,
-                                largeEnemy.getStatus()
-                        )
-                );
-            }
-        });
-
-        enemies.add(largeEnemy);
 
 
+
+        booms = new Vector<>();
 
 
     }
@@ -150,6 +95,10 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
 
         for (int i = 0;i<enemies.size();i++){
             enemies.get(i).onDraw(canvas);
+        }
+
+        for (int i = 0;i<booms.size();i++){
+            booms.get(i).onDraw(canvas);
         }
 
 
@@ -181,14 +130,35 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
             if (bullets.get(i).isDead()){
                 bullets.remove(i);
                 SoundManager.getInstance().play("hit");
+
             }
         }
 
         for (int i = 0;i<enemies.size();i++){
             if (enemies.get(i).isDead()){
+
+                booms.add(new Boom(BaseEntity.FLAG_OTHER,1,enemies.get(i).getPosX(),enemies.get(i).getPosY(),
+                        screenWidth,screenHeight,BitmapManager.getInstance().getBoom()));
+
                 enemies.remove(i);
                 SoundManager.getInstance().play("blast");
+
+
             }
+        }
+
+
+        for(int i=0;i<booms.size();i++){
+
+            booms.get(i).onLogic();
+
+        }
+
+        for(int i=0;i<booms.size();i++){
+
+            if(booms.get(i).isDead())
+                booms.remove(i);
+
         }
 
 
@@ -198,8 +168,15 @@ public class FirstScene extends BaseScene implements BaseController.FirstScene{
 
 
     @Override
-    public void start() {
-        setStatus(START);
+    public void setView(BaseView.MainActivityView view) {
+
+        this.view = view;
+
+    }
+
+    @Override
+    public void play() {
+        setStatus(PLAY);
     }
 
     @Override
