@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_tips"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:layout_width="0px"
+        android:orientation="vertical"
+        android:layout_height="60dp">
+
+        <TextView
+            android:drawableStart="@drawable/ic_alarm_on_black_24dp"
+            android:drawableLeft="@drawable/ic_alarm_on_black_24dp"
+            android:gravity="center"
+            android:textColor="#AAFFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/life_time_2"/>
+
+        <TextView
+            android:id="@+id/tv_life_times"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:textColor="#BBFBFF00"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_weight="1"
+        android:layout_width="0px"
+        android:orientation="vertical"
+        android:layout_height="60dp">
+        <TextView
+            android:drawableStart="@drawable/ic_colorize_black_24dp"
+            android:drawableLeft="@drawable/ic_alarm_on_black_24dp"
+            android:gravity="center"
+            android:textColor="#AAFFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/kill_enemy"/>
+
+        <TextView
+            android:id="@+id/tv_enemy_counts"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:textColor="#BBFBFF00"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_weight="1"
+        android:layout_width="0px"
+        android:orientation="vertical"
+        android:layout_height="60dp">
+        <TextView
+            android:drawableStart="@drawable/ic_favorite_border_black_24dp"
+            android:drawableLeft="@drawable/ic_favorite_border_black_24dp"
+            android:gravity="center"
+            android:textColor="#AAFFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/life"/>
+
+
+        <TextView
+            android:id="@+id/tv_player_life"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:textColor="#BBFBFF00"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

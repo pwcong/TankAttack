@@ -34,13 +34,8 @@ public class BitmapManager {
 
     private List<Bitmap> boom;
 
-    private Bitmap floor;
-
     private Bitmap bombObject;
 
-    private Bitmap starObject;
-
-    private Bitmap bg;
 
     private BitmapManager(){
 
@@ -154,27 +149,16 @@ public class BitmapManager {
         boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast7),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
         boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast8),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
 
-        floor = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.floor);
-
         bombObject = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.obj_bomb);
 
-        starObject = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.obj_star);
-
-        bg = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.bg);
 
     }
 
-    public Bitmap getBg() {
-        return bg;
-    }
 
     public Bitmap getBombObject() {
         return bombObject;
     }
 
-    public Bitmap getStarObject() {
-        return starObject;
-    }
 
     public Map<String, Bitmap> getPlayer() {
         return player;
@@ -200,7 +184,4 @@ public class BitmapManager {
         return boom;
     }
 
-    public Bitmap getFloor() {
-        return floor;
-    }
 }
