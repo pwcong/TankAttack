@@ -36,6 +36,12 @@ public class BitmapManager {
 
     private Bitmap floor;
 
+    private Bitmap bombObject;
+
+    private Bitmap starObject;
+
+    private Bitmap bg;
+
     private BitmapManager(){
 
         player = new ConcurrentHashMap<>();
@@ -44,8 +50,6 @@ public class BitmapManager {
         fastEnemy = new ConcurrentHashMap<>();
         largeEnemy = new ConcurrentHashMap<>();
         boom = new ArrayList<>();
-
-        floor = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.floor);
 
     }
 
@@ -150,8 +154,26 @@ public class BitmapManager {
         boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast7),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
         boom.add(BitmapUtils.zoom(BitmapFactory.decodeResource(App.getInstance().getResources(), R.raw.blast8),Const.BITMAP_SCALE,Const.BITMAP_SCALE));
 
+        floor = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.floor);
 
+        bombObject = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.obj_bomb);
 
+        starObject = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.obj_star);
+
+        bg = BitmapFactory.decodeResource(App.getInstance().getResources(),R.raw.bg);
+
+    }
+
+    public Bitmap getBg() {
+        return bg;
+    }
+
+    public Bitmap getBombObject() {
+        return bombObject;
+    }
+
+    public Bitmap getStarObject() {
+        return starObject;
     }
 
     public Map<String, Bitmap> getPlayer() {

@@ -12,8 +12,10 @@ public interface BaseView {
         void hideMenu();
         void showController();
         void hideController();
+        void showTips();
+        void hideTips();
         void showLose();
-        void setSecondText(String text);
-
+        void setSecondText(String second,String counts);
+        void setTips(String lifeTimes,String enemyCounts,String playerLife);
     }
 }

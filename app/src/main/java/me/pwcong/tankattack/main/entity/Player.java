@@ -122,21 +122,22 @@ public class Player extends BaseEntity implements BaseEntity.Behavior{
 
     }
 
-//    public void checkCollision(BaseEntity other){
-//
-//        if(other.getFlag() == BaseEntity.FLAG_ENEMY){
-//
-//            if(Math.abs(getPosX()-other.getPosX() + (getSelfWidth()+other.getSelfWidth())/2)<(getSelfWidth()+other.getSelfWidth())/2 &&
-//                    Math.abs(getPosY()-other.getPosY() + (getSelfHeight()+other.getSelfHeight())/2)<(getSelfHeight()+other.getSelfHeight())/2){
-//
-//                if(getLife()>0)
-//                    setLife(getLife()-1);
-//
-//                other.setDead(true);
-//
-//            }
-//        }
-//    }
+    public void checkCollision(BaseEntity other){
+
+        if(other.getFlag() == BaseEntity.FLAG_OBJECT){
+
+            if(Math.abs((getPosX()+getSelfWidth()/2) - (other.getPosX() + other.getSelfWidth()/2))
+                    < (getSelfWidth()/2 + other.getSelfWidth()/2) &&
+                    Math.abs((getPosY()+getSelfHeight()/2) - (other.getPosY() + other.getSelfHeight()/2))
+                    < (getSelfHeight()/2 + other.getSelfHeight()/2)){
+
+                ((BaseObject)other).doEvent();
+
+                other.setDead(true);
+
+            }
+        }
+    }
 
     public String getStatus() {
         return status;

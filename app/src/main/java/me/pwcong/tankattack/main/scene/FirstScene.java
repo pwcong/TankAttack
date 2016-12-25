@@ -1,24 +1,21 @@
 package me.pwcong.tankattack.main.scene;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 
 import java.util.Vector;
 
 import me.pwcong.tankattack.config.Const;
 import me.pwcong.tankattack.main.controller.BaseController;
+import me.pwcong.tankattack.main.entity.BaseEnemy;
 import me.pwcong.tankattack.main.entity.BaseEntity;
+import me.pwcong.tankattack.main.entity.BaseObject;
 import me.pwcong.tankattack.main.entity.Boom;
 import me.pwcong.tankattack.main.entity.Bullet;
-import me.pwcong.tankattack.main.param.Vector2;
-import me.pwcong.tankattack.main.util.EnemyCreater;
 import me.pwcong.tankattack.main.entity.Player;
-import me.pwcong.tankattack.main.entity.BaseEnemy;
+import me.pwcong.tankattack.main.util.EnemyCreater;
+import me.pwcong.tankattack.main.util.ObjectCreater;
 import me.pwcong.tankattack.main.view.BaseView;
 import me.pwcong.tankattack.manager.BitmapManager;
 import me.pwcong.tankattack.manager.SharedPreferenceManager;
@@ -30,14 +27,17 @@ import me.pwcong.tankattack.manager.SoundManager;
 
 public class FirstScene extends BaseScene<BaseView.MainActivityView> implements BaseController.FirstScene{
 
-    public final String TAG = getClass().getSimpleName();
 
     int maxEnemy = 3;
+    int maxObject = 2;
 
     Vector<BaseEnemy> enemies;
     Vector<Bullet> bullets;
     Player player;
     Vector<Boom> booms;
+    Vector<BaseObject> objects;
+
+    int enemyCounts;
 
     public FirstScene(Context context) {
         super(context);
@@ -50,11 +50,13 @@ public class FirstScene extends BaseScene<BaseView.MainActivityView> implements 
     @Override
     protected void initVariable() {
 
+        enemyCounts=0;
 
         enemies = new Vector<>();
         bullets = new Vector<>();
+        objects = new Vector<>();
 
-        player = new Player(BaseEntity.FLAG_PLAYER,1,screenWidth/2,screenHeight/2,screenWidth,screenHeight,
+        player = new Player(BaseEntity.FLAG_PLAYER,3,screenWidth/2,screenHeight/2,screenWidth,screenHeight,
                 BitmapManager.getInstance().getPlayer(), Const.PLAYER_SPEED);
 
         player.setOnActionListener(new Player.OnActionListener() {
@@ -78,7 +80,6 @@ public class FirstScene extends BaseScene<BaseView.MainActivityView> implements 
 
         SoundManager.getInstance().play("add");
 
-
         booms = new Vector<>();
 
 
@@ -87,7 +88,8 @@ public class FirstScene extends BaseScene<BaseView.MainActivityView> implements 
     @Override
     protected void doDraw(Canvas canvas) {
 
-        canvas.drawColor(Color.LTGRAY);
+        canvas.drawColor(0xff834B20);
+
 
         player.onDraw(canvas);
 
@@ -103,11 +105,18 @@ public class FirstScene extends BaseScene<BaseView.MainActivityView> implements 
             booms.get(i).onDraw(canvas);
         }
 
+        for (int i = 0;i<objects.size();i++){
+            objects.get(i).onDraw(canvas);
+        }
+
 
     }
 
     @Override
     protected void doLogic() {
+
+        getView().setTips(String.valueOf(currentTime/Const.FPS),String.valueOf(enemyCounts),
+                String.valueOf(player.getLife()));
 
         player.onLogic();
 
@@ -128,6 +137,11 @@ public class FirstScene extends BaseScene<BaseView.MainActivityView> implements 
 
         }
 
+        for(int i=0;i<objects.size();i++){
+            objects.get(i).onLogic();
+            player.checkCollision(objects.get(i));
+        }
+
         for (int i = 0;i<bullets.size();i++){
             if (bullets.get(i).isDead()){
                 bullets.remove(i);
@@ -142,11 +156,16 @@ public class FirstScene extends BaseScene<BaseView.MainActivityView> implements 
                 booms.add(new Boom(BaseEntity.FLAG_OTHER,1,enemies.get(i).getPosX(),enemies.get(i).getPosY(),
                         screenWidth,screenHeight,BitmapManager.getInstance().getBoom()));
 
+                enemyCounts++;
                 enemies.remove(i);
                 SoundManager.getInstance().play("blast");
 
-
             }
+        }
+
+        for(int i=0;i<objects.size();i++){
+            if (objects.get(i).isDead())
+                objects.remove(i);
         }
 
 
@@ -174,34 +193,40 @@ public class FirstScene extends BaseScene<BaseView.MainActivityView> implements 
 
             long lifetime = currentTime/Const.FPS;
 
-            int t = SharedPreferenceManager.getInstance().getInt(Const.KEY_SCORE,0);
+            int t = SharedPreferenceManager.getInstance().getInt(Const.KEY_LIFE_TIMES,0);
             if (t<lifetime){
-                SharedPreferenceManager.getInstance().putInt(Const.KEY_SCORE,(int)lifetime);
+                SharedPreferenceManager.getInstance().putInt(Const.KEY_LIFE_TIMES,(int)lifetime);
             }
 
-            getView().setSecondText(String.valueOf(lifetime));
+            int c = SharedPreferenceManager.getInstance().getInt(Const.KEY_ENEMY_COUNTS,0);
+            if(c<enemyCounts){
+                SharedPreferenceManager.getInstance().putInt(Const.KEY_ENEMY_COUNTS,enemyCounts);
+            }
+
+            getView().setSecondText(String.valueOf(lifetime),String.valueOf(enemyCounts));
             getView().showLose();
 
 
         }
 
 
+        /**
+         *  自动生成敌人
+         */
         if(currentTime%40==0&&enemies.size()<maxEnemy){
 
             int random = Math.round((float)(Math.random()*2));
 
-            Vector2 pos = new Vector2((float)((screenWidth-100)*Math.random()+50),(float)((screenHeight-100)*Math.random()+50));
-
             switch (random){
 
                 case 0:
-                    EnemyCreater.createSimpleEnemy(pos.getX(),pos.getY(),screenWidth,screenHeight,enemies,bullets);
+                    EnemyCreater.createSimpleEnemy(screenWidth,screenHeight,enemies,bullets);
                     break;
                 case 1:
-                    EnemyCreater.createFastEnemy(pos.getX(),pos.getY(),screenWidth,screenHeight,enemies,bullets);
+                    EnemyCreater.createFastEnemy(screenWidth,screenHeight,enemies,bullets);
                     break;
                 case 2:
-                    EnemyCreater.createLargeEnemy(pos.getX(),pos.getY(),screenWidth,screenHeight,enemies,bullets);
+                    EnemyCreater.createLargeEnemy(screenWidth,screenHeight,enemies,bullets);
                     break;
                 default:break;
 
@@ -209,11 +234,18 @@ public class FirstScene extends BaseScene<BaseView.MainActivityView> implements 
 
         }
 
+
+
         if(currentTime%400==0){
             if(maxEnemy<20)
                 maxEnemy++;
-        }
 
+            if(objects.size()<maxObject){
+                ObjectCreater.createBmonObject(screenWidth,screenHeight,objects,enemies);
+            }
+
+
+        }
 
 
 

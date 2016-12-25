@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import com.jakewharton.rxbinding.view.RxView;
 import java.util.concurrent.TimeUnit;
 
 import me.pwcong.tankattack.R;
+import me.pwcong.tankattack.config.Const;
 import me.pwcong.tankattack.main.controller.BaseController;
 import me.pwcong.tankattack.main.entity.BaseEntity;
 import me.pwcong.tankattack.main.scene.FirstScene;
@@ -27,7 +29,6 @@ import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity implements View.OnTouchListener,BaseView.MainActivityView {
 
-    private final String TAG = getClass().getSimpleName();
 
     BaseController.FirstScene scene;
 
@@ -48,6 +49,12 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
     Button btn_exit_lose;
     Button btn_again;
     TextView text_second;
+    TextView text_enemy_counts;
+
+    LinearLayout rootTips;
+    TextView tv_life_times;
+    TextView tv_enemy_counts;
+    TextView tv_player_life;
 
 
     @Override
@@ -64,6 +71,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
         initController();
         initMenu();
         initLose();
+        initTips();
     }
 
     private void initController(){
@@ -83,7 +91,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
         btn_right.setOnTouchListener(this);
 
         btn_fire = (Button) findViewById(R.id.btn_fire);
-        RxView.clicks(btn_fire).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+        RxView.clicks(btn_fire).throttleFirst(Const.PLAYER_FIRE_SPEED, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 scene.fire();
@@ -122,7 +130,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
         });
 
         btn_exit = (Button) findViewById(R.id.btn_exit);
-        RxView.clicks(btn_exit).throttleFirst(1000,TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+        RxView.clicks(btn_exit).throttleFirst(1000,TimeUnit.SECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 ActivityManager.getInstance().removeAll();
@@ -166,6 +174,18 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
 
 
         text_second = (TextView) findViewById(R.id.text_second);
+
+        text_enemy_counts = (TextView) findViewById(R.id.text_enemy_counts);
+
+    }
+
+    private void initTips(){
+
+        rootTips = (LinearLayout) findViewById(R.id.root_tips);
+        tv_life_times = (TextView) findViewById(R.id.tv_life_times);
+        tv_enemy_counts = (TextView) findViewById(R.id.tv_enemy_counts);
+        tv_player_life= (TextView) findViewById(R.id.tv_player_life);
+
 
     }
 
@@ -226,7 +246,6 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
 
         rootMenu.setVisibility(View.GONE);
 
-
     }
 
     @Override
@@ -244,12 +263,23 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
     }
 
     @Override
+    public void showTips() {
+        rootTips.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideTips() {
+        rootTips.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showLose() {
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 rootLose.setVisibility(View.VISIBLE);
+                rootController.setVisibility(View.GONE);
             }
         });
 
@@ -258,16 +288,29 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener,B
 
 
     @Override
-    public void setSecondText(final String text) {
+    public void setSecondText(final String second,final String counts) {
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                text_second.setText(text);
+                text_second.setText(second);
+                text_enemy_counts.setText(counts);
             }
         });
 
 
+    }
+
+    @Override
+    public void setTips(final String lifeTimes, final String enemyCounts, final String playerLife) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tv_life_times.setText(lifeTimes);
+                tv_enemy_counts.setText(enemyCounts);
+                tv_player_life.setText(playerLife);
+            }
+        });
     }
 
     @Override

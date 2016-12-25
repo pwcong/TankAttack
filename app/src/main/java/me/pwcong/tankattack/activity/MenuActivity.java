@@ -60,8 +60,10 @@ public class MenuActivity extends BaseActivity {
             @Override
             public void call(Void aVoid) {
 
-                int score = SharedPreferenceManager.getInstance().getInt(Const.KEY_SCORE,0);
-                String text = "最高坚持时长为：" + String.valueOf(score) + " s";
+                int lifeTimes = SharedPreferenceManager.getInstance().getInt(Const.KEY_LIFE_TIMES,0);
+                int enemyCounts = SharedPreferenceManager.getInstance().getInt(Const.KEY_ENEMY_COUNTS,0);
+                String text = "最高存活时长为：" + String.valueOf(lifeTimes) + " s ，最高消灭敌人数为："
+                        + String.valueOf(enemyCounts) + " 。";
 
                 Snackbar.make(btn_top, text,Snackbar.LENGTH_SHORT).show();
 

@@ -18,4 +18,9 @@
     <string name="detail_how2play">前后左右，发射炮弹，就这样 (笑)\n</string>
     <string name="level">难度：</string>
     <string name="detail_level">炒鸡简单，只有坚持300秒的才是真男人 (微笑)\n</string>
+    <string name="life_time_2">存活时间</string>
+    <string name="kill_enemy">消灭敌人</string>
+    <string name="fire_speed">发射间隙</string>
+    <string name="life">生命值</string>
+    <string name="enemy_counts">消灭敌人：</string>
 </resources>

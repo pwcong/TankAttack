@@ -11,6 +11,7 @@ public abstract class BaseEntity {
     public static final int FLAG_PLAYER = 1;
     public static final int FLAG_OTHER = 0;
     public static final int FLAG_ENEMY = -1;
+    public static final int FLAG_OBJECT = 2;
 
     public static final String STATUS_UP = "up";
     public static final String STATUS_DOWN = "down";
